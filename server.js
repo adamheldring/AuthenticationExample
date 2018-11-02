@@ -7,7 +7,7 @@ import uuid from "uuid/v4"
 const app = express()
 app.use(bodyParser.json())
 
-const mongoServer = "mongodb://localhost/myNewDb"
+const mongoServer = "mongodb://localhost/authLecture"
 mongoose.connect(mongoServer, { useMongoClient: true })
 mongoose.Promise = Promise
 
