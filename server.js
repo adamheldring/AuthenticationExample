@@ -40,7 +40,6 @@ const User = mongoose.model("User", {
 app.get("/users/:id", (req, res) => {
   res.json({
     requestingUserId: req.params.id,
-    requestToken: req.headers.token
   })
 })
 
