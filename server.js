@@ -24,11 +24,8 @@ const User = mongoose.model("User", {
     type: String,
     unique: true
   },
-  password: {
-    type: String,
-    required: true
-  },
-  accesstoken: {
+  password: String,
+  accessToken: {
     type: String,
     default: () => uuid()
   }
@@ -46,57 +43,4 @@ app.get("/users/:id", (req, res) => {
   })
 })
 
-// LOGIN endpoint
-app.post("/sessions/", (req, res) => {
-  // X find the user (based on the username)
-  // X encrypt their password
-  // X check encrypted password against the users password
-  // X return user's token if everything was good or errors
-
-
-// parameter "password" is shorthand for "password: 'password'"
-  User.findOne({ name: req.body.name })
-    .then(user => {
-      if (user && bcrypt.compareSync(req.body.password, user.password)) {
-          res.json({ accesstoken: user.accesstoken })
-      } else {
-        res.json({ notFound: true })
-      }
-
-    })
-    .catch(err => {
-      res.json(err)
-    })
-})
-
-// Middleware
-const authenticateUser = (req, res, next) => {
-  User.findById(req.params.id)
-    .then(user => {
-      if (user.accessToken === req.headers.accesstoken) {
-        next()
-      } else {
-        // User is not logged in
-        res.status(401).json({ loggedOut: true })
-      }
-      console.log(req.headers.accesstoken)
-      res.send(req.headers.accesstoken)
-    })
-}
-
-// GET /users/123/movies
-// app.use calls for middleware and runs authenticateUsers first
-app.use("/users/:id/movies", authenticateUser)
-app.get("/users/:id/movies", (req, res) => {
-  res.json({ movies: [] })
-})
-
 app.listen(8080, () => console.log("Example app listening on port 8080!"))
-
-
-// CORRESPONDING FRONTEND CODE
-// fetch(http://localhost:8080/users/${localStorage.getItem("userId")}123/movies`, {
-//   headers: {
-//     accessToken: sessionStorage.getItem("accessToken")
-//   }
-// })
